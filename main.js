@@ -98,6 +98,9 @@ class Game {
         const r = level.rooms[0];
         this.player.x = (r.x + r.w / 2) * this.tileSize;
         this.player.y = (r.y + r.h / 2) * this.tileSize;
+        // Snap camera immediately so tiles are visible on the first frame
+        this.camera.x = -this.player.x;
+        this.camera.y = -this.player.y;
         this.entities = level.entities;
         this.map = level.map;
         this.interactives = level.interactives;
@@ -594,11 +597,14 @@ class Game {
         if (this.player.hp > 0) {
             const f = this.player.frame;
             const pSprite = f === 1 ? 'marine-walk-a.png' : f === 2 ? 'marine-walk-b.png' : 'marine-idle.png';
-            ctx.save();
-            ctx.translate(this.player.x, this.player.y);
-            ctx.scale(this.player.facing, 1);
-            ctx.drawImage(this.sprites[pSprite], -20, -20, 40, 40);
-            ctx.restore();
+            const pImg = this.sprites[pSprite];
+            if (pImg) {
+                ctx.save();
+                ctx.translate(this.player.x, this.player.y);
+                ctx.scale(this.player.facing, 1);
+                ctx.drawImage(pImg, -20, -20, 40, 40);
+                ctx.restore();
+            }
         }
 
         this.projectiles.forEach(p => { ctx.fillStyle = '#7fffd4'; ctx.fillRect(p.x-1, p.y-1, 3, 3); });
