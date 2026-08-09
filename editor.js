@@ -3,24 +3,51 @@
  */
 
 const ASSET_LIST = [
-    'colonist-alive-idle.png', 'colonist-alive-walk-a.png', 'colonist-alive-walk-b.png', 'colonist-dead.png', 'colonist-infected.png',
-    'corpo-alive-idle.png', 'corpo-alive-walk-a.png', 'corpo-alive-walk-b.png', 'corpo-dead.png', 'corpo-infected.png',
-    'marine-alive-idle.png', 'marine-alive-walk-a.png', 'marine-alive-walk-b.png', 'marine-dead.png', 'marine-infected.png',
-    'specialist-alive-idle.png', 'specialist-alive-walk-a.png', 'specialist-alive-walk-b.png', 'specialist-dead.png', 'specialist-infected.png',
-    'synth-active-idle.png', 'synth-active-walk-a.png', 'synth-active-walk-b.png', 'synth-dead.png',
+    // Colonists
+    'colonist-idle.png', 'colonist-walk-a.png', 'colonist-walk-b.png', 'colonist-dead.png', 'colonist-infected.png',
+    'colonist-confused.png', 'colonist-panic.png', 'colonist-panic-a.png', 'colonist-panic-b.png',
+    'colonist-captured-a.png', 'colonist-captured-b.png',
+    // Corpo
+    'corpo-idle.png', 'corpo-walk-a.png', 'corpo-walk-b.png', 'corpo-infected.png',
+    'corpo-confused.png', 'corpo-panic.png', 'corpo-panic-a.png',
+    // Marine
+    'marine-idle.png', 'marine-walk-a.png', 'marine-walk-b.png', 'marine-dead.png', 'marine-infected.png',
+    'marine-confused.png',
+    // Specialist
+    'specialist-idle.png', 'specialist-walk-a.png', 'specialist-walk-b.png', 'specialist-dead.png', 'specialist-infected.png',
+    'specialist-confused.png', 'specialist-panic.png', 'specialist-panic-a.png', 'specialist-panic-b.png',
+    'specialist-armed-idle.png', 'specialist-armed-walk-a.png', 'specialist-armed-walk-b.png',
+    // Synth
+    'synth-idle.png', 'synth-walk-a.png', 'synth-walk-b.png', 'synth-dead.png',
+    'synth-panic.png', 'synth-panic-a.png', 'synth-panic-b.png',
+    // Xeno - Drone
     'xeno-drone-idle.png', 'xeno-drone-walk-a.png', 'xeno-drone-walk-b.png',
+    // Xeno - Warrior
     'xeno-warrior-idle.png', 'xeno-warrior-walk-a.png', 'xeno-warrior-walk-b.png', 'xeno-warrior-attack.png',
-    'xeno-queen-new.png', 'xeno-queen-new-walk-a.png', 'xeno-queen-new-walk-b.png',
-    'xeno-egg-001.png', 'xeno-egg-002.png', 'xeno-facehugger-walk-a.png', 'xeno-facehugger-walk-b.png',
+    // Xeno - Queen
+    'xeno-queen-idle.png', 'xeno-queen-walk-a.png', 'xeno-queen-walk-b.png', 'xeno-queen-eggs.png',
+    // Xeno - Lifecycle
+    'xeno-egg-a.png', 'xeno-egg-b.png', 'xeno-facehugger-walk-a.png', 'xeno-facehugger-walk-b.png',
     'xeno-chestburster.png', 'xeno-chestburster-cocoon.png',
-    'resin.png', 'tile-corridor-floor.png', 'tile-room-floor.png', 'tile-warning.png',
-    'tile-wall-side-left.png', 'tile-wall-side-right.png', 'tile-wall-top-vertical-edge.png', 'tile-wall-side-horizontal-edge.png',
-    'tile-door-horizontal-open-frame.png', 'tile-door-horizontal-open-bottom.png',
-    'tile-door-horizontal-closed-left-bottom.png', 'tile-door-horizontal-closed-right-bottom.png',
-    'tile-door-vertical-open-top.png', 'tile-door-vertical-open-bottom.png',
-    'tile-door-vertical-closed-top.png', 'tile-door-vertical-closed-bottom.png',
+    // Props
+    'prop-resin.png', 'prop-hive-nest.png', 'prop-specimen-tank.png', 'prop-medical-vat.png', 'prop-synth-vat.png',
+    // Floor tiles
+    'tile-floor-corridor.png', 'tile-floor-room.png', 'tile-floor-warning.png',
+    // Wall tiles
+    'tile-wall-corner-tl.png', 'tile-wall-corner-tr.png', 'tile-wall-corner-bl.png', 'tile-wall-corner-br.png',
+    'tile-wall-corner-bl-alt.png', 'tile-wall-corner-br-alt.png',
+    'tile-wall-edge-top.png', 'tile-wall-edge-top-v2.png', 'tile-wall-edge-side.png', 'tile-wall-edge-h-alt.png',
+    'tile-wall-inner-l.png', 'tile-wall-inner-r.png',
+    // Door tiles
+    'tile-door-h-closed.png', 'tile-door-h-closed-l.png', 'tile-door-h-closed-r.png', 'tile-door-h-open.png',
+    'tile-door-v-closed.png', 'tile-door-v-open-t.png', 'tile-door-v-open-b.png',
+    // Wall interactives
     'tile-wall-keypad.png', 'tile-wall-switch-up.png', 'tile-wall-switch-down.png',
-    'tile-wall-panel-duct.png', 'tile-wall-panel-grill.png', 'tile-wall-panel-open.png', 'tile-wall-panel-cover.png'
+    'tile-wall-button-green-on.png', 'tile-wall-button-green-off.png',
+    'tile-wall-button-red-on.png', 'tile-wall-button-red-off.png',
+    // Wall panels
+    'tile-wall-panel-duct.png', 'tile-wall-panel-grill.png', 'tile-wall-panel-open.png',
+    'tile-wall-panel-cover.png', 'tile-wall-panel-cover-bolted.png'
 ];
 
 class Editor {
@@ -55,6 +82,12 @@ class Editor {
         this.mouseX = 0;
         this.mouseY = 0;
 
+        this.showWalkOverlay = false; // Walkability overlay toggle
+
+        // Undo history
+        this.history = [];
+        this.maxHistory = 50;
+
         this.init();
     }
 
@@ -63,6 +96,14 @@ class Editor {
         window.addEventListener('resize', () => this.resize());
 
         await this.loadAssets();
+
+        // Auto-detect tile size from the first tile sprite loaded
+        const tileSprite = this.sprites['tile-floor-room.png'] || this.sprites['tile-wall-edge-top.png'];
+        if (tileSprite) {
+            this.tileSize = tileSprite.naturalWidth;
+            document.getElementById('grid-size').value = this.tileSize;
+        }
+
         this.populateLibrary();
         this.setupEventListeners();
 
@@ -145,6 +186,12 @@ class Editor {
                 img.src = `sprites/${name}`;
                 div.appendChild(img);
 
+                // Show sprite name below thumbnail
+                const label = document.createElement('span');
+                label.className = 'sprite-label';
+                label.textContent = name.replace('.png', '').replace(/^(tile-|prop-)/, '');
+                div.appendChild(label);
+
                 div.addEventListener('click', () => {
                     document.querySelectorAll('.sprite-item').forEach(el => el.classList.remove('selected'));
                     div.classList.add('selected');
@@ -217,6 +264,24 @@ class Editor {
             this.tileSize = parseInt(e.target.value, 10);
         });
 
+        // Walk overlay toggle
+        const walkOverlayBtn = document.getElementById('btn-walk-overlay');
+        if (walkOverlayBtn) {
+            walkOverlayBtn.onclick = () => {
+                this.showWalkOverlay = !this.showWalkOverlay;
+                walkOverlayBtn.classList.toggle('active', this.showWalkOverlay);
+                // Ensure all objects have tileType for overlay
+                if (this.showWalkOverlay) {
+                    this.objects.forEach(obj => {
+                        if (!obj.tileType) {
+                            obj.tileType = this.getAutoTileType(obj.sprite);
+                            obj.isWall = !this.isWalkable(obj.tileType);
+                        }
+                    });
+                }
+            };
+        }
+
         // Canvas Drop Setup (for Prefabs)
         this.canvas.addEventListener('dragover', (e) => {
             e.preventDefault(); // Allow drop
@@ -252,6 +317,13 @@ class Editor {
 
         // Export JSON
         document.getElementById('btn-save').onclick = () => {
+            // Ensure all objects have tileType and isWall before export
+            this.objects.forEach(obj => {
+                if (!obj.tileType) {
+                    obj.tileType = this.getAutoTileType(obj.sprite);
+                    obj.isWall = !this.isWalkable(obj.tileType);
+                }
+            });
             const data = {
                 tileSize: this.tileSize,
                 objects: this.objects,
@@ -286,6 +358,17 @@ class Editor {
                         if (data.groups) this.groups = data.groups;
                         if (data.wires) this.wires = data.wires;
                         if (data.prefabs) this.prefabs = data.prefabs;
+
+                        // Migrate legacy objects: ensure tileType and isWall exist
+                        this.objects.forEach(obj => {
+                            if (!obj.tileType) {
+                                obj.tileType = this.getAutoTileType(obj.sprite);
+                                obj.isWall = !this.isWalkable(obj.tileType);
+                            }
+                            if (typeof obj.isWall === 'undefined') {
+                                obj.isWall = !this.isWalkable(obj.tileType);
+                            }
+                        });
 
                         // Ensure UI reflects loaded state
                         document.getElementById('grid-size').value = this.tileSize;
@@ -393,10 +476,30 @@ class Editor {
                 case 'b': this.setTool('place'); break;
                 case 'w': this.setTool('wire'); break;
                 case 'e': this.setTool('erase'); break;
+                case 'g':
+                    // Toggle walkability overlay
+                    this.showWalkOverlay = !this.showWalkOverlay;
+                    const walkBtn = document.getElementById('btn-walk-overlay');
+                    if (walkBtn) walkBtn.classList.toggle('active', this.showWalkOverlay);
+                    if (this.showWalkOverlay) {
+                        this.objects.forEach(obj => {
+                            if (!obj.tileType) {
+                                obj.tileType = this.getAutoTileType(obj.sprite);
+                                obj.isWall = !this.isWalkable(obj.tileType);
+                            }
+                        });
+                    }
+                    break;
                 case 'delete':
                 case 'backspace':
                     this.deleteSelected();
                     break;
+            }
+
+            // Ctrl+Z for undo
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
+                e.preventDefault();
+                this.undo();
             }
         });
 
@@ -418,6 +521,66 @@ class Editor {
 
     generateId() {
         return Math.random().toString(36).substr(2, 9);
+    }
+
+    /**
+     * Auto-classify a sprite name into a tile type for collision purposes.
+     * Floor tiles are walkable, everything else blocks by default.
+     */
+    getAutoTileType(spriteName) {
+        const s = spriteName.toLowerCase();
+        if (s.includes('floor-room') || s.includes('room-floor') || s === 'tile-room-floor.png') return 'floor-room';
+        if (s.includes('floor-corridor') || s.includes('corridor-floor') || s === 'tile-corridor-floor.png') return 'floor-corridor';
+        if (s.includes('floor-warning') || s.includes('warning')) return 'floor-room'; // warning tiles are walkable
+        if (s.includes('door')) return 'door';
+        if (s.includes('switch') || s.includes('button') || s.includes('keypad')) return 'switch';
+        if (s.includes('panel')) return 'panel';
+        if (s.includes('wall')) return 'wall';
+        if (s.includes('resin') || s.includes('prop-')) return 'deco';
+        // Non-tile sprites (entities, characters, xenos)
+        if (!s.startsWith('tile-')) return 'entity';
+        // Default: anything tile-like but unclassified is a wall
+        return 'wall';
+    }
+
+    /**
+     * Determine if a tileType is walkable (not a wall).
+     */
+    isWalkable(tileType) {
+        return tileType === 'floor-room' || tileType === 'floor-corridor' || tileType === 'entity' || tileType === 'deco';
+    }
+
+    /** Terrain tiles use cell-based (top-left) origin for seamless tiling */
+    isTerrain(tileType) {
+        return ['floor-room', 'floor-corridor', 'wall', 'door'].includes(tileType);
+    }
+
+    /** Overlays (panels, switches, deco) snap on top of wall tiles */
+    isOverlay(tileType) {
+        return ['panel', 'switch', 'deco'].includes(tileType);
+    }
+
+    /** Save current state for undo */
+    pushHistory() {
+        this.history.push({
+            objects: JSON.parse(JSON.stringify(this.objects)),
+            groups: JSON.parse(JSON.stringify(this.groups)),
+            wires: JSON.parse(JSON.stringify(this.wires))
+        });
+        if (this.history.length > this.maxHistory) this.history.shift();
+    }
+
+    /** Undo last action */
+    undo() {
+        if (this.history.length === 0) return;
+        const state = this.history.pop();
+        this.objects = state.objects;
+        this.groups = state.groups;
+        this.wires = state.wires;
+        this.selectedIds = [];
+        this.selectedGroupId = null;
+        this.updateHierarchy();
+        this.updateProperties();
     }
 
     setTool(tool) {
@@ -449,14 +612,22 @@ class Editor {
         return Math.round(val / this.tileSize) * this.tileSize;
     }
 
+    /** Snap to cell top-left corner (for terrain tiles) */
+    snapToCell(val) {
+        return Math.floor(val / this.tileSize) * this.tileSize;
+    }
+
     getObjectAt(wx, wy) {
         // Return topmost object that contains point
         for (let i = this.objects.length - 1; i >= 0; i--) {
             const obj = this.objects[i];
             const ts = this.tileSize;
-            // Assuming centered origin for objects visually
-            if (wx >= obj.x - ts / 2 && wx <= obj.x + ts / 2 && wy >= obj.y - ts / 2 && wy <= obj.y + ts / 2) {
-                return obj;
+            if (this.isTerrain(obj.tileType)) {
+                // Terrain: top-left origin (cell-based)
+                if (wx >= obj.x && wx < obj.x + ts && wy >= obj.y && wy < obj.y + ts) return obj;
+            } else {
+                // Entities/overlays: centered origin
+                if (wx >= obj.x - ts / 2 && wx <= obj.x + ts / 2 && wy >= obj.y - ts / 2 && wy <= obj.y + ts / 2) return obj;
             }
         }
         return null;
@@ -477,13 +648,39 @@ class Editor {
 
         if (this.activeTool === 'place' && this.activeSprite) {
             // Place object
+            const tileType = this.getAutoTileType(this.activeSprite);
+            let px, py;
+
+            if (this.isTerrain(tileType)) {
+                // Terrain tiles: snap to cell top-left for seamless tiling
+                px = this.snapToCell(worldPos.x);
+                py = this.snapToCell(worldPos.y);
+            } else if (this.isOverlay(tileType)) {
+                // Panels/switches/decorations: snap to nearest wall tile center
+                const cellX = this.snapToCell(worldPos.x);
+                const cellY = this.snapToCell(worldPos.y);
+                const wallTile = this.objects.find(o =>
+                    this.isTerrain(o.tileType) && o.x === cellX && o.y === cellY
+                );
+                // If wall found, overlay on it; otherwise place at cell
+                px = wallTile ? wallTile.x + this.tileSize / 2 : snapped.x;
+                py = wallTile ? wallTile.y + this.tileSize / 2 : snapped.y;
+            } else {
+                // Entities: center-snap
+                px = snapped.x;
+                py = snapped.y;
+            }
+
+            this.pushHistory();
             const obj = {
                 id: this.generateId(),
                 sprite: this.activeSprite,
-                x: snapped.x,
-                y: snapped.y,
+                x: px,
+                y: py,
                 name: this.activeSprite.replace('.png', ''),
-                props: { locked: false, role: 'none', behavior: '', animations: { 'idle': [this.activeSprite] }, defaultState: 'idle', hitboxType: 'self', hitboxValue: 0 }
+                tileType: tileType,
+                isWall: !this.isWalkable(tileType),
+                props: { locked: false, role: tileType, behavior: '', animations: { 'idle': [this.activeSprite] }, defaultState: 'idle', hitboxType: 'self', hitboxValue: 0 }
             };
             this.objects.push(obj);
             this.selectedIds = [obj.id];
@@ -534,8 +731,9 @@ class Editor {
         else if (this.activeTool === 'erase' || isRightClick) {
             const clickedObj = this.getObjectAt(worldPos.x, worldPos.y);
             if (clickedObj) {
+                this.pushHistory();
                 this.selectedIds = [clickedObj.id];
-                this.deleteSelected();
+                this.deleteSelected(true); // skip pushing history again
             }
         }
         else if (this.activeTool === 'wire') {
@@ -599,12 +797,18 @@ class Editor {
         this.isDraggingView = false;
 
         if (this.isDraggingObject) {
+            this.pushHistory();
             // Snap all dragged objects to grid on release
             this.selectedIds.forEach(id => {
                 const obj = this.objects.find(o => o.id === id);
                 if (obj) {
-                    obj.x = this.snapToGrid(obj.x);
-                    obj.y = this.snapToGrid(obj.y);
+                    if (this.isTerrain(obj.tileType)) {
+                        obj.x = this.snapToCell(obj.x);
+                        obj.y = this.snapToCell(obj.y);
+                    } else {
+                        obj.x = this.snapToGrid(obj.x);
+                        obj.y = this.snapToGrid(obj.y);
+                    }
                 }
             });
             this.isDraggingObject = false;
@@ -623,6 +827,7 @@ class Editor {
                     // Ensure wire doesn't already exist
                     const exists = this.wires.find(w => w.sourceId === this.wireStartObj.id && w.targetId === targetId);
                     if (!exists) {
+                        this.pushHistory();
                         this.wires.push({
                             id: this.generateId(),
                             sourceId: this.wireStartObj.id,
@@ -636,7 +841,8 @@ class Editor {
         }
     }
 
-    deleteSelected() {
+    deleteSelected(skipHistory = false) {
+        if (!skipHistory) this.pushHistory();
         this.objects = this.objects.filter(o => !this.selectedIds.includes(o.id));
         // Remove orphans from groups
         this.groups.forEach(g => {
@@ -651,6 +857,7 @@ class Editor {
 
     groupSelected() {
         if (this.selectedIds.length < 2) return;
+        this.pushHistory();
         const group = {
             id: this.generateId(),
             name: 'Group_' + this.groups.length,
@@ -1161,11 +1368,14 @@ class Editor {
             <div class="prop-row">
                 <label>Role</label>
                 <select id="prop-role">
-                    <option value="none" ${obj.props.role === 'none' ? 'selected' : ''}>Wall / Deco</option>
-                    <option value="door" ${obj.props.role === 'door' ? 'selected' : ''}>Door Part</option>
+                    <option value="floor-room" ${obj.props.role === 'floor-room' ? 'selected' : ''}>Floor (Room)</option>
+                    <option value="floor-corridor" ${obj.props.role === 'floor-corridor' ? 'selected' : ''}>Floor (Corridor)</option>
+                    <option value="wall" ${obj.props.role === 'wall' || obj.props.role === 'none' ? 'selected' : ''}>Wall / Structural</option>
+                    <option value="door" ${obj.props.role === 'door' ? 'selected' : ''}>Door</option>
                     <option value="switch" ${obj.props.role === 'switch' ? 'selected' : ''}>Switch</option>
                     <option value="panel" ${obj.props.role === 'panel' ? 'selected' : ''}>Control Panel</option>
                     <option value="entity" ${obj.props.role === 'entity' ? 'selected' : ''}>Entity Spawn</option>
+                    <option value="deco" ${obj.props.role === 'deco' ? 'selected' : ''}>Decoration</option>
                 </select>
             </div>
             <div class="prop-row">
@@ -1218,7 +1428,11 @@ class Editor {
         document.getElementById('prop-name').onchange = (e) => { obj.name = e.target.value; this.updateHierarchy(); };
         document.getElementById('prop-x').onchange = (e) => { obj.x = parseFloat(e.target.value); };
         document.getElementById('prop-y').onchange = (e) => { obj.y = parseFloat(e.target.value); };
-        document.getElementById('prop-role').onchange = (e) => { obj.props.role = e.target.value; };
+        document.getElementById('prop-role').onchange = (e) => {
+            obj.props.role = e.target.value;
+            obj.tileType = e.target.value;
+            obj.isWall = !this.isWalkable(e.target.value);
+        };
         document.getElementById('prop-class-preset').onchange = (e) => {
             const preset = e.target.value;
             obj.props.classPreset = preset;
@@ -1494,35 +1708,67 @@ class Editor {
         ctx.moveTo(0, -10); ctx.lineTo(0, 10);
         ctx.stroke();
 
+        // Pixel-art rendering
+        ctx.imageSmoothingEnabled = false;
+
         // Render Objects
         this.objects.forEach(obj => {
             if (obj.hidden) return; // For group sequence playback
 
             const sprite = this.sprites[obj.sprite];
             if (sprite) {
-                // Determine opacity or visual tint if part of a group
                 ctx.globalAlpha = 1.0;
-                ctx.drawImage(sprite, obj.x - tileSize / 2, obj.y - tileSize / 2, tileSize, tileSize);
+                if (this.isTerrain(obj.tileType)) {
+                    // Terrain: top-left origin, fill entire cell seamlessly
+                    ctx.drawImage(sprite, obj.x, obj.y, tileSize, tileSize);
+                } else {
+                    // Entities/overlays: centered origin
+                    ctx.drawImage(sprite, obj.x - tileSize / 2, obj.y - tileSize / 2, tileSize, tileSize);
+                }
             }
 
             // Selection highlight
             if (this.selectedIds.includes(obj.id)) {
                 ctx.strokeStyle = '#007acc';
                 ctx.lineWidth = 2 / zoom;
-                ctx.strokeRect(obj.x - tileSize / 2, obj.y - tileSize / 2, tileSize, tileSize);
+                if (this.isTerrain(obj.tileType)) {
+                    ctx.strokeRect(obj.x, obj.y, tileSize, tileSize);
+                } else {
+                    ctx.strokeRect(obj.x - tileSize / 2, obj.y - tileSize / 2, tileSize, tileSize);
+                }
+            }
+
+            // Walkability overlay
+            if (this.showWalkOverlay && obj.tileType) {
+                const walkable = this.isWalkable(obj.tileType);
+                ctx.globalAlpha = 0.3;
+                ctx.fillStyle = walkable ? '#00ff88' : '#ff2244';
+                if (this.isTerrain(obj.tileType)) {
+                    ctx.fillRect(obj.x, obj.y, tileSize, tileSize);
+                } else {
+                    ctx.fillRect(obj.x - tileSize / 2, obj.y - tileSize / 2, tileSize, tileSize);
+                }
+                ctx.globalAlpha = 1.0;
             }
         });
 
         // Current tool preview (ghost object)
         if (this.activeTool === 'place' && this.activeSprite) {
             const worldPos = this.screenToWorld(this.mouseX + this.canvas.getBoundingClientRect().left, this.mouseY + this.canvas.getBoundingClientRect().top);
-            const snappedX = this.snapToGrid(worldPos.x);
-            const snappedY = this.snapToGrid(worldPos.y);
+            const previewType = this.getAutoTileType(this.activeSprite);
 
             ctx.globalAlpha = 0.5;
             const spr = this.sprites[this.activeSprite];
             if (spr) {
-                ctx.drawImage(spr, snappedX - tileSize / 2, snappedY - tileSize / 2, tileSize, tileSize);
+                if (this.isTerrain(previewType)) {
+                    const cx = this.snapToCell(worldPos.x);
+                    const cy = this.snapToCell(worldPos.y);
+                    ctx.drawImage(spr, cx, cy, tileSize, tileSize);
+                } else {
+                    const sx = this.snapToGrid(worldPos.x);
+                    const sy = this.snapToGrid(worldPos.y);
+                    ctx.drawImage(spr, sx - tileSize / 2, sy - tileSize / 2, tileSize, tileSize);
+                }
             }
             ctx.globalAlpha = 1.0;
         }
