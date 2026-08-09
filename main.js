@@ -3,22 +3,48 @@
  */
 
 const ASSET_LIST = [
-    'colonist-alive-idle.png', 'colonist-alive-walk-a.png', 'colonist-alive-walk-b.png', 'colonist-dead.png', 'colonist-infected.png',
-    'corpo-alive-idle.png', 'corpo-alive-walk-a.png', 'corpo-alive-walk-b.png', 'corpo-dead.png', 'corpo-infected.png',
-    'marine-alive-idle.png', 'marine-alive-walk-a.png', 'marine-alive-walk-b.png', 'marine-dead.png', 'marine-infected.png',
-    'specialist-alive-idle.png', 'specialist-alive-walk-a.png', 'specialist-alive-walk-b.png', 'specialist-dead.png', 'specialist-infected.png',
-    'synth-active-idle.png', 'synth-active-walk-a.png', 'synth-active-walk-b.png', 'synth-dead.png',
+    // Colonists
+    'colonist-idle.png', 'colonist-walk-a.png', 'colonist-walk-b.png', 'colonist-dead.png', 'colonist-infected.png',
+    'colonist-confused.png', 'colonist-panic.png', 'colonist-panic-a.png', 'colonist-panic-b.png',
+    'colonist-captured-a.png', 'colonist-captured-b.png',
+    // Corpo
+    'corpo-idle.png', 'corpo-walk-a.png', 'corpo-walk-b.png', 'corpo-infected.png',
+    'corpo-confused.png', 'corpo-panic.png', 'corpo-panic-a.png',
+    // Marine
+    'marine-idle.png', 'marine-walk-a.png', 'marine-walk-b.png', 'marine-dead.png', 'marine-infected.png',
+    'marine-confused.png',
+    // Specialist
+    'specialist-idle.png', 'specialist-walk-a.png', 'specialist-walk-b.png', 'specialist-dead.png', 'specialist-infected.png',
+    'specialist-confused.png', 'specialist-panic.png', 'specialist-panic-a.png', 'specialist-panic-b.png',
+    'specialist-armed-idle.png', 'specialist-armed-walk-a.png', 'specialist-armed-walk-b.png',
+    // Synth
+    'synth-idle.png', 'synth-walk-a.png', 'synth-walk-b.png', 'synth-dead.png',
+    'synth-panic.png', 'synth-panic-a.png', 'synth-panic-b.png',
+    // Xeno
     'xeno-drone-idle.png', 'xeno-drone-walk-a.png', 'xeno-drone-walk-b.png',
     'xeno-warrior-idle.png', 'xeno-warrior-walk-a.png', 'xeno-warrior-walk-b.png', 'xeno-warrior-attack.png',
-    'xeno-queen-new.png', 'xeno-queen-new-walk-a.png', 'xeno-queen-new-walk-b.png',
-    'xeno-egg-001.png', 'xeno-egg-002.png', 'xeno-facehugger-walk-a.png', 'xeno-facehugger-walk-b.png',
+    'xeno-queen-idle.png', 'xeno-queen-walk-a.png', 'xeno-queen-walk-b.png', 'xeno-queen-eggs.png',
+    'xeno-egg-a.png', 'xeno-egg-b.png', 'xeno-facehugger-walk-a.png', 'xeno-facehugger-walk-b.png',
     'xeno-chestburster.png', 'xeno-chestburster-cocoon.png',
-    'resin.png', 'tile-corridor-floor.png', 'tile-room-floor.png', 'tile-warning.png',
-    'tile-wall-left-top.png', 'tile-wall-right-top.png', 'tile-wall-bottom-left.png', 'tile-wall-bottom-right.png',
-    'tile-wall-top-hirozontal-edge.png', 'tile-wall-top-vertical-edge.png', 'tile-wall-side-left.png', 'tile-wall-side-right.png',
-    'tile-door-horizontal-closed.png', 'tile-door-horizontal-open-bottom.png', 'tile-door-horizontal-open-frame.png',
-    'tile-wall-button-green-on.png', 'tile-wall-button-green-off.png', 'tile-wall-switch-up.png', 'tile-wall-switch-down.png',
-    'specimen-tank.png', 'mecical-vat.png', 'synth-vat.png'
+    // Props
+    'prop-resin.png', 'prop-hive-nest.png', 'prop-specimen-tank.png', 'prop-medical-vat.png', 'prop-synth-vat.png',
+    // Floor tiles
+    'tile-floor-corridor.png', 'tile-floor-room.png', 'tile-floor-warning.png',
+    // Wall tiles
+    'tile-wall-corner-tl.png', 'tile-wall-corner-tr.png', 'tile-wall-corner-bl.png', 'tile-wall-corner-br.png',
+    'tile-wall-corner-bl-alt.png', 'tile-wall-corner-br-alt.png',
+    'tile-wall-edge-top.png', 'tile-wall-edge-top-v2.png', 'tile-wall-edge-side.png', 'tile-wall-edge-h-alt.png',
+    'tile-wall-inner-l.png', 'tile-wall-inner-r.png',
+    // Door tiles
+    'tile-door-h-closed.png', 'tile-door-h-closed-l.png', 'tile-door-h-closed-r.png', 'tile-door-h-open.png',
+    'tile-door-v-closed.png', 'tile-door-v-open-t.png', 'tile-door-v-open-b.png',
+    // Wall interactives
+    'tile-wall-keypad.png', 'tile-wall-switch-up.png', 'tile-wall-switch-down.png',
+    'tile-wall-button-green-on.png', 'tile-wall-button-green-off.png',
+    'tile-wall-button-red-on.png', 'tile-wall-button-red-off.png',
+    // Wall panels
+    'tile-wall-panel-duct.png', 'tile-wall-panel-grill.png', 'tile-wall-panel-open.png',
+    'tile-wall-panel-cover.png', 'tile-wall-panel-cover-bolted.png'
 ];
 
 class Game {
@@ -79,6 +105,12 @@ class Game {
         this.xenosSpawned = false;
         this.gameState = 'playing';
         document.getElementById('overlay').classList.add('hidden');
+
+        // Build O(1) walkability map
+        this.walkMap = new Map();
+        this.map.forEach(t => {
+            this.walkMap.set(`${t.x},${t.y}`, t);
+        });
     }
 
     async loadAssets() {
@@ -174,8 +206,10 @@ class Game {
     }
 
     isWallAt(px, py) {
-        const tile = this.map.find(t => t.x === Math.floor(px / this.tileSize) && t.y === Math.floor(py / this.tileSize));
-        return tile ? tile.isWall : false;
+        const key = `${Math.floor(px / this.tileSize)},${Math.floor(py / this.tileSize)}`;
+        const tile = this.walkMap.get(key);
+        // No tile at position = void = impassable. Only floor/corridor tiles are walkable.
+        return tile ? tile.isWall : true;
     }
 
     generateLevel(floor) {
@@ -232,22 +266,24 @@ class Game {
         Object.keys(grid).forEach(key => {
             const [x, y] = key.split(',').map(Number);
             const data = grid[key];
-            let sprite = data.type === 'wall' ? 'tile-wall-top-hirozontal-edge.png' : 'tile-room-floor.png';
-            if(data.type === 'corridor') sprite = 'tile-corridor-floor.png';
-            if(data.type === 'door') sprite = 'tile-door-horizontal-closed.png';
+            let sprite = data.type === 'wall' ? 'tile-wall-edge-top.png' : 'tile-floor-room.png';
+            let tileType = data.type; // 'wall', 'floor', 'corridor', 'door'
+            if(data.type === 'corridor') sprite = 'tile-floor-corridor.png';
+            if(data.type === 'door') sprite = 'tile-door-h-closed.png';
             
-            let isWall = data.type === 'wall' || data.type === 'door';
+            // Only floor and corridor tiles are walkable. Everything else blocks.
+            let isWall = !(data.type === 'floor' || data.type === 'corridor');
 
             if (data.type === 'wall') {
                 const r = data.room;
-                if (x === r.x && y === r.y) sprite = 'tile-wall-left-top.png';
-                else if (x === r.x + r.w - 1 && y === r.y) sprite = 'tile-wall-right-top.png';
-                else if (x === r.x && y === r.y + r.h - 1) sprite = 'tile-wall-bottom-left.png';
-                else if (x === r.x + r.w - 1 && y === r.y + r.h - 1) sprite = 'tile-wall-bottom-right.png';
-                else if (x === r.x || x === r.x + r.w - 1) sprite = 'tile-wall-top-vertical-edge.png';
+                if (x === r.x && y === r.y) sprite = 'tile-wall-corner-tl.png';
+                else if (x === r.x + r.w - 1 && y === r.y) sprite = 'tile-wall-corner-tr.png';
+                else if (x === r.x && y === r.y + r.h - 1) sprite = 'tile-wall-corner-bl.png';
+                else if (x === r.x + r.w - 1 && y === r.y + r.h - 1) sprite = 'tile-wall-corner-br.png';
+                else if (x === r.x || x === r.x + r.w - 1) sprite = 'tile-wall-edge-side.png';
             }
 
-            map.push({ x, y, sprite, isWall, state: 'closed', linkedTo: data.linkedTo });
+            map.push({ x, y, sprite, isWall, tileType, state: 'closed', linkedTo: data.linkedTo });
         });
 
         // Initial Populating
@@ -514,15 +550,14 @@ class Game {
     }
 
     getSpriteFor(en) {
-        if (en.type === 'xeno-egg') return 'xeno-egg-001.png';
-        if (en.type.includes('vat') || en.type.includes('tank')) return `${en.type}.png`;
+        if (en.type === 'xeno-egg') return 'xeno-egg-a.png';
+        if (en.type.includes('vat') || en.type.includes('tank')) return `prop-${en.type}.png`;
         const f = en.animFrame || 0;
         const walk = f === 1 ? 'walk-a' : f === 2 ? 'walk-b' : null;
         if (en.type === 'xeno-facehugger') return `xeno-facehugger-${walk || 'walk-a'}.png`;
         if (en.type.includes('xeno')) return walk ? `${en.type}-${walk}.png` : `${en.type}-idle.png`;
         if (en.infected) return `${en.type}-infected.png`;
-        const prefix = en.type === 'synth' ? 'synth-active' : `${en.type}-alive`;
-        return walk ? `${prefix}-${walk}.png` : `${prefix}-idle.png`;
+        return walk ? `${en.type}-${walk}.png` : `${en.type}-idle.png`;
     }
 
     render() {
@@ -558,7 +593,7 @@ class Game {
 
         if (this.player.hp > 0) {
             const f = this.player.frame;
-            const pSprite = f === 1 ? 'marine-alive-walk-a.png' : f === 2 ? 'marine-alive-walk-b.png' : 'marine-alive-idle.png';
+            const pSprite = f === 1 ? 'marine-walk-a.png' : f === 2 ? 'marine-walk-b.png' : 'marine-idle.png';
             ctx.save();
             ctx.translate(this.player.x, this.player.y);
             ctx.scale(this.player.facing, 1);
