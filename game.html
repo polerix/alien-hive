@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XENO HIVE | The Aqua Protocol</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="game-container">
+        <canvas id="game-canvas"></canvas>
+
+        <div id="hud">
+            <div class="hud-top">
+                <div class="panel indicator-glass clickable" id="alien-stats-panel">
+                    <div class="stat-item">
+                        <span class="stat-label">XENO SYNC</span>
+                        <span id="count-xenos" class="stat-value">000</span>
+                    </div>
+                    <div id="alien-breakdown" class="breakdown-panel hidden">
+                        <div class="breakdown-item"><span>EGGS</span><span id="count-detail-egg">00</span></div>
+                        <div class="breakdown-item"><span>HUGGERS</span><span id="count-detail-facehugger">00</span></div>
+                        <div class="breakdown-item"><span>DRONES</span><span id="count-detail-drone">00</span></div>
+                        <div class="breakdown-item"><span>WARRIORS</span><span id="count-detail-warrior">00</span></div>
+                        <div class="breakdown-item"><span>QUEEN</span><span id="count-detail-queen">00</span></div>
+                    </div>
+                </div>
+
+                <div class="panel indicator-glass clickable" id="terran-stats-panel">
+                    <div class="stat-item">
+                        <span class="stat-label">TERRAN LOAD</span>
+                        <span id="count-hosts" class="stat-value">000</span>
+                    </div>
+                    <div id="terran-breakdown" class="breakdown-panel hidden">
+                        <div class="breakdown-item"><span>COLONISTS</span><span id="count-detail-colonist">00</span></div>
+                        <div class="breakdown-item"><span>CORPOS</span><span id="count-detail-corpo">00</span></div>
+                        <div class="breakdown-item"><span>SYNTHS</span><span id="count-detail-synth">00</span></div>
+                        <div class="breakdown-item"><span>MARINES</span><span id="count-detail-marine">00</span></div>
+                        <div class="breakdown-item"><span>SPECIALISTS</span><span id="count-detail-specialist">00</span></div>
+                    </div>
+                </div>
+
+                <div class="panel indicator-glass">
+                    <div class="stat-item">
+                        <span class="stat-label">STAMINA</span>
+                        <span id="player-hp" class="stat-value">100%</span>
+                    </div>
+                </div>
+
+                <div class="panel game-info-panel">
+                    <div id="current-level" class="game-info">LEVEL 01</div>
+                    <div id="current-objective" class="game-info">INIT...</div>
+                </div>
+            </div>
+
+            <div class="hud-bottom">
+                <div class="speed-control panel">
+                    <span id="speed-1" class="speed-tag active">1X</span>
+                    <span id="speed-2" class="speed-tag">2X</span>
+                    <span id="speed-3" class="speed-tag">4X</span>
+                    <span id="speed-4" class="speed-tag">MAX</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="overlay" class="hidden">
+        <div id="overlay-panel">
+            <div id="overlay-title">SIGNAL LOST</div>
+            <div id="overlay-score"></div>
+            <button id="overlay-btn" class="control-btn">RESTART</button>
+        </div>
+    </div>
+
+    <!-- Game Scripts -->
+    <script src="main.js" type="module"></script>
+</body>
+
+</html>
